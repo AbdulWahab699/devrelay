@@ -1,4 +1,4 @@
-import { minimatch } from "minimatch"
+﻿import { minimatch } from "minimatch"
 
 const NOISE_FILES = [
   "*.lock",
@@ -32,7 +32,7 @@ export function isReformatFile(diff: string): boolean {
   if (total < 50) return false
 
   // Line counts must be equal for a pure reformat
-  // A formatter removes a line and adds it back reformatted — always 1:1
+  // A formatter removes a line and adds it back reformatted â€” always 1:1
   if (addedLines.length !== removedLines.length) return false
 
   const ratio =
@@ -40,7 +40,7 @@ export function isReformatFile(diff: string): boolean {
     Math.max(addedLines.length, removedLines.length)
   if (ratio <= 0.85) return false
 
-  // Sort both and compare — pure reformat has same content, different whitespace
+  // Sort both and compare â€” pure reformat has same content, different whitespace
   const sortedAdded = [...addedLines].sort().join("")
   const sortedRemoved = [...removedLines].sort().join("")
 
@@ -84,5 +84,5 @@ export function filterGitDiff(rawDiff: string): string {
   if (kept.length === 0) return "No significant code changes detected."
 
   const result = ("diff --git" + kept.join("\ndiff --git")).trim()
-  return truncateAtLineBreak(result, 1500)
+  return truncateAtLineBreak(result, 1400)
 }

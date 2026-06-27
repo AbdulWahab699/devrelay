@@ -1,5 +1,4 @@
 ﻿export type HandoffStatus = 'draft' | 'awaiting_review' | 'published';
-
 export type ConfidenceLevel = 'high' | 'medium' | 'low';
 
 export interface HandoffBrief {

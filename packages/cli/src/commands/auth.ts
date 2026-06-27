@@ -20,10 +20,14 @@ interface TokenResponse {
 interface AuthResponse {
   jwt: string
   refreshToken: string
-  userId: string
-  teamId: string
-  displayName: string
   teamSlug: string
+  user: {
+    id: string
+    displayName: string
+    email: string | null
+    avatarUrl: string | null
+  }
+  isNewUser: boolean
 }
 
 async function getDeviceCode(): Promise<DeviceCodeResponse> {
@@ -135,14 +139,16 @@ export async function authLogin(): Promise<void> {
 
   let auth: AuthResponse
   try {
-    const apiUrl = BASE_URL + "/auth/github"
+    // Device flow — send accessToken directly to dedicated endpoint
+    const apiUrl = BASE_URL + "/auth/github/device"
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ accessToken }),
     })
     if (!response.ok) {
-      throw new Error("Failed to authenticate with DevRelay API. Try again.")
+      const errBody = await response.json() as { message?: string }
+      throw new Error(errBody.message ?? "Failed to authenticate with DevRelay API.")
     }
     auth = (await response.json()) as AuthResponse
   } catch (err) {
@@ -153,26 +159,24 @@ export async function authLogin(): Promise<void> {
   saveConfig({
     jwt: auth.jwt,
     refreshToken: auth.refreshToken,
-    userId: auth.userId,
-    teamId: auth.teamId,
-    displayName: auth.displayName,
-    teamSlug: auth.teamSlug,
+    userId: auth.user.id,
+    teamId: "",
+    displayName: auth.user.displayName,
+    teamSlug: auth.teamSlug ?? "my-team",
   })
 
   console.log("")
-  console.log(chalk.green("Authenticated as"), chalk.bold(auth.displayName))
-  console.log(chalk.dim("Team:"), chalk.bold(auth.teamSlug))
+  console.log(chalk.green("Authenticated as"), chalk.bold(auth.user.displayName))
+  console.log(chalk.dim("Team:"), chalk.bold(auth.teamSlug ?? "my-team"))
 }
 
 export async function authLogout(): Promise<void> {
-  // Known limitation: only clears local tokens
-  // v1.1: POST /auth/logout to backend to invalidate refreshToken in DB
   clearConfig()
   console.log(chalk.green("Logged out successfully."))
 }
 
 export function authStatus(): void {
-  const config = { jwt: null }
+  const config = { jwt: null, displayName: "", teamSlug: "" }
   if (!config?.jwt) {
     console.log(chalk.yellow("Not authenticated. Run devrelay auth login."))
   }
