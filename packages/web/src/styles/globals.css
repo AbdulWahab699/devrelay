@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  --bg-primary: #051F20;
+  --bg-secondary: rgba(11, 43, 38, 0.65);
+  --bg-tertiary: #163832;
+  --bg-border: rgba(142, 182, 155, 0.15);
+  --text-primary: #E2F1E7;
+  --text-secondary: #8EB69B;
+  --text-muted: #235347;
+  --accent: #00F5D4;
+  --accent-hover: #00D2B4;
+  --accent-subtle: rgba(0, 245, 212, 0.1);
+  --success: #3CD070;
+  --warning: #FFD166;
+  --error: #FF6B6B;
+  --info: #0EA5E9;
+  --nav-bg: rgba(5, 31, 32, 0.8);
+  --nav-active: #00F5D4;
+  --nav-active-bg: rgba(35, 83, 71, 0.4);
+  --nav-hover: rgba(22, 56, 50, 0.5);
+  --glass-blur: blur(40px);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, pre, .mono {
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-in {
+  0%   { opacity: 0; transform: translateY(60px) scale(0.96); }
+  50%  { opacity: 1; transform: translateY(-8px) scale(1.01); }
+  70%  { transform: translateY(4px) scale(0.99); }
+  85%  { transform: translateY(-3px) scale(1.005); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes typewriter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.9); opacity: 0.6; }
+  50%  { transform: scale(1.05); opacity: 0.3; }
+  100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

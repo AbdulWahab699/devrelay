@@ -3,6 +3,7 @@ import corsPlugin from './plugins/cors.js'
 import jwtPlugin from './plugins/jwt.js'
 import { authRoutes } from './routes/auth.js'
 import { handoffRoutes } from './routes/handoffs.js'
+import { slackRoutes } from './routes/slack.js'
 
 export function buildApp() {
   const app = Fastify({
@@ -21,6 +22,7 @@ export function buildApp() {
   // Routes
   app.register(authRoutes)
   app.register(handoffRoutes)
+  app.register(slackRoutes)
 
   // Health check
   app.get('/health', async () => {
