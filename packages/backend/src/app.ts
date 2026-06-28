@@ -4,6 +4,7 @@ import jwtPlugin from './plugins/jwt.js'
 import { authRoutes } from './routes/auth.js'
 import { handoffRoutes } from './routes/handoffs.js'
 import { slackRoutes } from './routes/slack.js'
+import { teamRoutes } from './routes/teams.js'
 
 export function buildApp() {
   const app = Fastify({
@@ -23,6 +24,7 @@ export function buildApp() {
   app.register(authRoutes)
   app.register(handoffRoutes)
   app.register(slackRoutes)
+  app.register(teamRoutes)
 
   // Health check
   app.get('/health', async () => {
