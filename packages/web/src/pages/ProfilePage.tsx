@@ -2,20 +2,23 @@
 import { apiRequest } from '../lib/api'
 
 interface UserProfile {
-  id: string
-  githubId: string
-  email: string | null
-  displayName: string | null
-  avatarUrl: string | null
-  createdAt: string
+  user: {
+    id: string
+    github_id: string
+    email: string | null
+    display_name: string | null
+    avatar_url: string | null
+    created_at: string
+  }
 }
 
 export default function ProfilePage() {
-  const { data: user, isLoading } = useQuery<UserProfile>({
+  const { data, isLoading } = useQuery<UserProfile>({
     queryKey: ['profile'],
     queryFn: () => apiRequest<UserProfile>('/auth/me'),
   })
 
+  const user = data?.user
   const rowStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: '1px solid rgba(142,182,155,0.08)' }
 
   return (
@@ -29,18 +32,18 @@ export default function ProfilePage() {
         ) : (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
-              {user?.avatarUrl
-                ? <img src={user.avatarUrl} alt="avatar" style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid rgba(142,182,155,0.2)' }} />
-                : <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#163832', border: '2px solid rgba(142,182,155,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', color: '#8EB69B' }}>{user?.displayName?.[0]?.toUpperCase() ?? 'U'}</div>
+              {user?.avatar_url
+                ? <img src={user.avatar_url} alt="avatar" style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid rgba(142,182,155,0.2)' }} />
+                : <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#163832', border: '2px solid rgba(142,182,155,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', color: '#8EB69B' }}>{user?.display_name?.[0]?.toUpperCase() ?? 'U'}</div>
               }
               <div>
-                <div style={{ fontSize: '18px', fontWeight: 600, color: '#E2F1E7' }}>{user?.displayName ?? 'Unknown'}</div>
+                <div style={{ fontSize: '18px', fontWeight: 600, color: '#E2F1E7' }}>{user?.display_name ?? 'Unknown'}</div>
                 <div style={{ fontSize: '13px', color: '#235347', marginTop: '2px' }}>{user?.email ?? 'No email'}</div>
               </div>
             </div>
             {[
-              { label: 'GitHub ID', value: user?.githubId },
-              { label: 'Member since', value: user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : '—' },
+              { label: 'GitHub ID', value: user?.github_id },
+              { label: 'Member since', value: user?.created_at ? new Date(user.created_at).toLocaleDateString() : '—' },
             ].map(row => (
               <div key={row.label} style={rowStyle}>
                 <span style={{ fontSize: '13px', color: '#235347' }}>{row.label}</span>

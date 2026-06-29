@@ -49,7 +49,7 @@ export default function SettingsPage() {
           {slack?.connected ? (
             <button style={btnStyle()} onClick={() => apiRequest('/slack/disconnect', { method: 'POST' })}>Disconnect</button>
           ) : (
-            <a href={`https://slack.com/oauth/v2/authorize?client_id=${import.meta.env.VITE_SLACK_CLIENT_ID}&scope=chat:write,users:read&redirect_uri=${encodeURIComponent(window.location.origin + '/slack/callback')}`}
+            <a href={`https://slack.com/oauth/v2/authorize?client_id=${import.meta.env.VITE_SLACK_CLIENT_ID}&scope=chat:write,users:read&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fslack%2Fcallback`}
               style={{ ...btnStyle(true), textDecoration: 'none', display: 'inline-block' }}>
               Add to Slack
             </a>

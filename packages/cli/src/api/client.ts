@@ -70,7 +70,7 @@ async function refreshJwt(): Promise<string | null> {
   const config = loadConfig()
   if (!config?.refreshToken) return null
   try {
-    const response = await fetch(`${BASE_URL}/auth/refresh`, {
+    const response = await fetch(BASE_URL + "/auth/refresh", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken: config.refreshToken }),
@@ -89,19 +89,23 @@ export async function apiRequest<T>(path: string, options: RequestInit = {}): Pr
   const jwt = config?.jwt
 
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
     ...(options.headers as Record<string, string>),
   }
 
-  if (jwt) headers["Authorization"] = `Bearer ${jwt}`
+  // Only set Content-Type when there is a body — fixes empty body 400 errors
+  if (options.body) {
+    headers["Content-Type"] = "application/json"
+  }
 
-  const response = await fetchWithTimeout(`${BASE_URL}${path}`, { ...options, headers })
+  if (jwt) headers["Authorization"] = "Bearer " + jwt
+
+  const response = await fetchWithTimeout(BASE_URL + path, { ...options, headers })
 
   if (response.status === 401) {
     const newJwt = await refreshJwt()
     if (newJwt) {
-      headers["Authorization"] = `Bearer ${newJwt}`
-      const retryResponse = await fetchWithTimeout(`${BASE_URL}${path}`, { ...options, headers })
+      headers["Authorization"] = "Bearer " + newJwt
+      const retryResponse = await fetchWithTimeout(BASE_URL + path, { ...options, headers })
       if (!retryResponse.ok) {
         throw new ApiError(retryResponse.status, await safeParseBody(retryResponse))
       }

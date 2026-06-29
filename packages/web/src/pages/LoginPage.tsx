@@ -49,10 +49,11 @@ export default function LoginPage() {
         jwt: string
         refreshToken: string
         teamSlug: string
+        isNewUser: boolean // Added here to fix the TypeScript error
         user: { id: string; displayName: string; email: string | null; avatarUrl: string | null; githubId: string }
       }) => {
         setAuth(data.jwt, data.refreshToken, data.user, data.teamSlug)
-        navigate(data.user ? "/handoffs" : "/onboarding")
+        navigate(data.isNewUser ? "/onboarding" : "/handoffs")
       })
       .catch(() => setError("Authentication failed. Please try again."))
       .finally(() => setLoading(false))
@@ -311,7 +312,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#E2F1E7",
     lineHeight: 1.3,
     letterSpacing: "-0.02em",
-    minHeight: "72px", // Prevents layout shift when text is empty or wrapping
+    minHeight: "72px",
   },
   cursor: {
     display: "inline-block",

@@ -1,12 +1,16 @@
 ﻿import type { FastifyInstance } from 'fastify'
 import { authMiddleware } from '../middleware/auth.js'
-import { handleSlackAuthorize, handleSlackStatus } from '../handlers/slack-handler.js'
+import { handleSlackAuthorize, handleSlackStatus, handleSlackCallback } from '../handlers/slack-handler.js'
 
 export async function slackRoutes(app: FastifyInstance) {
-  app.addHook('preHandler', authMiddleware)
+  // Public — no auth (Slack redirects here after OAuth)
+  app.get('/slack/callback', {
+    handler: handleSlackCallback,
+  })
 
-  // POST /slack/authorize — exchange Slack OAuth code, store install
+  // Protected routes
   app.post('/slack/authorize', {
+    preHandler: authMiddleware,
     schema: {
       body: {
         type: 'object',
@@ -20,8 +24,8 @@ export async function slackRoutes(app: FastifyInstance) {
     handler: handleSlackAuthorize,
   })
 
-  // GET /slack/status — check if team has connected Slack
   app.get('/slack/status', {
+    preHandler: authMiddleware,
     handler: handleSlackStatus,
   })
 }
