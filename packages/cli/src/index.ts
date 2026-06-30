@@ -1,3 +1,4 @@
+﻿import 'dotenv/config'
 import { Command } from "commander"
 import { authLogin, authLogout } from "./commands/auth.js"
 import { statusCommand } from "./commands/status.js"

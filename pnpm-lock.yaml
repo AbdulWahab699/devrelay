@@ -289,6 +289,9 @@ importers:
       commander:
         specifier: ^12.0.0
         version: 12.1.0
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
       minimatch:
         specifier: ^9.0.4
         version: 9.0.9

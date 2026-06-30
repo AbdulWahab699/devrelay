@@ -1,22 +1,20 @@
-﻿FROM node:20-alpine
-
-RUN npm install -g pnpm
+FROM node:20-alpine AS base
 
 WORKDIR /app
 
-COPY pnpm-workspace.yaml ./
-COPY package.json ./
-COPY turbo.json ./
-COPY tsconfig.base.json ./
-
+# Copy workspace files
+COPY package.json pnpm-workspace.yaml turbo.json tsconfig.base.json ./
 COPY packages/shared/package.json ./packages/shared/
 COPY packages/backend/package.json ./packages/backend/
 
+RUN npm install -g pnpm@11.8.0
 RUN pnpm install --frozen-lockfile
 
+# Copy source
 COPY packages/shared ./packages/shared
 COPY packages/backend ./packages/backend
 
+# Build
 RUN pnpm --filter @devrelay/shared build
 RUN pnpm --filter @devrelay/backend build
 
