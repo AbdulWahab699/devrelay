@@ -2,7 +2,7 @@
   "name": "@devrelay/web",
   "version": "0.0.1",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && vite build",
     "dev": "vite",
     "test": "vitest run",
     "lint": "eslint src"
