@@ -13,6 +13,7 @@ import AppShell from './components/layout/AppShell'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
+  { path: '/auth/callback', element: <LoginPage /> },
   { path: '/onboarding', element: <ProtectedRoute><OnboardingPage /></ProtectedRoute> },
   {
     element: <ProtectedRoute><AppShell /></ProtectedRoute>,
